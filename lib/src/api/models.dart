@@ -10,6 +10,12 @@ class Branch {
 		'name' : name,
 		'createdAt' : createdAt,
 	};
+
+	factory Branch.fromJson(Map<String, dynamic> json) => Branch(
+		name: json['name'],
+		createdAt: json['createdAt'],
+	);
+
 }
 
 class BranchMetadata {
@@ -22,6 +28,13 @@ class BranchMetadata {
 		'branch' : branch,
 		'stage' : stage,
 	};
+
+	factory BranchMetadata.fromJson(Map<String, dynamic> json) => BranchMetadata(
+		repository: json['repository'],
+		branch: json['branch'],
+		stage: json['stage'],
+	);
+
 }
 
 class BranchMigration {
@@ -42,6 +55,17 @@ class BranchMigration {
 		'createdAt' : createdAt,
 		'renamedTables' : renamedTables,
 	};
+
+	factory BranchMigration.fromJson(Map<String, dynamic> json) => BranchMigration(
+		id: json['id'],
+		parentID: json['parentID'],
+		status: json['status'],
+		title: json['title'],
+		lastGitRevision: json['lastGitRevision'],
+		createdAt: json['createdAt'],
+		renamedTables: json['renamedTables'],
+	);
+
 }
 
 class Column {
@@ -54,6 +78,13 @@ class Column {
 		'type' : type,
 		'columns' : columns,
 	};
+
+	factory Column.fromJson(Map<String, dynamic> json) => Column(
+		name: json['name'],
+		type: json['type'],
+		columns: json['columns'],
+	);
+
 }
 
 class ColumnMigration {
@@ -64,6 +95,12 @@ class ColumnMigration {
 		'old' : old,
 		'new' : newColumnMigration,
 	};
+
+	factory ColumnMigration.fromJson(Map<String, dynamic> json) => ColumnMigration(
+		old: json['old'],
+		newColumnMigration: json['new'],
+	);
+
 }
 
 class DBBranch {
@@ -86,6 +123,18 @@ class DBBranch {
 		'startedFrom' : startedFrom,
 		'schema' : schema,
 	};
+
+	factory DBBranch.fromJson(Map<String, dynamic> json) => DBBranch(
+		databaseName: json['databaseName'],
+		branchName: json['branchName'],
+		createdAt: json['createdAt'],
+		id: json['id'],
+		lastMigrationID: json['lastMigrationID'],
+		metadata: json['metadata'],
+		startedFrom: json['startedFrom'],
+		schema: json['schema'],
+	);
+
 }
 
 class FilterColumn<T> {
@@ -110,6 +159,14 @@ class FilterColumnIncludes {
 		'\$includesAll' : $includesAll,
 		'\$includesNone' : $includesNone,
 	};
+
+	factory FilterColumnIncludes.fromJson(Map<String, dynamic> json) => FilterColumnIncludes(
+		$includes: json['\$includes'],
+		$includesAny: json['\$includesAny'],
+		$includesAll: json['\$includesAll'],
+		$includesNone: json['\$includesNone'],
+	);
+
 }
 
 class FilterExpression {
@@ -128,6 +185,16 @@ class FilterExpression {
 		'\$none' : $none,
 		'\$not' : $not,
 	};
+
+	factory FilterExpression.fromJson(Map<String, dynamic> json) => FilterExpression(
+		$exists: json['\$exists'],
+		$existsNot: json['\$existsNot'],
+		$any: json['\$any'],
+		$all: json['\$all'],
+		$none: json['\$none'],
+		$not: json['\$not'],
+	);
+
 }
 
 class FilterList<T> {
@@ -170,6 +237,18 @@ class FilterPredicateOp {
 		'\$endsWith' : $endsWith,
 		'\$pattern' : $pattern,
 	};
+
+	factory FilterPredicateOp.fromJson(Map<String, dynamic> json) => FilterPredicateOp(
+		$lt: json['\$lt'],
+		$le: json['\$le'],
+		$gt: json['\$gt'],
+		$ge: json['\$ge'],
+		$contains: json['\$contains'],
+		$startsWith: json['\$startsWith'],
+		$endsWith: json['\$endsWith'],
+		$pattern: json['\$pattern'],
+	);
+
 }
 
 class FilterPredicateRangeOp {
@@ -184,6 +263,14 @@ class FilterPredicateRangeOp {
 		'\$gt' : $gt,
 		'\$ge' : $ge,
 	};
+
+	factory FilterPredicateRangeOp.fromJson(Map<String, dynamic> json) => FilterPredicateRangeOp(
+		$lt: json['\$lt'],
+		$le: json['\$le'],
+		$gt: json['\$gt'],
+		$ge: json['\$ge'],
+	);
+
 }
 
 class FilterRangeValue<T> {
@@ -216,12 +303,23 @@ class ListBranchesResponse {
 		'displayName' : displayName,
 		'branches' : branches,
 	};
+
+	factory ListBranchesResponse.fromJson(Map<String, dynamic> json) => ListBranchesResponse(
+		databaseName: json['databaseName'],
+		displayName: json['displayName'],
+		branches: json['branches'],
+	);
+
 }
 
 class ListDatabasesResponse {
 	const ListDatabasesResponse();
 	Map<String, dynamic> toJson() => {
 	};
+
+	factory ListDatabasesResponse.fromJson(Map<String, dynamic> json) => ListDatabasesResponse(
+	);
+
 }
 
 class MetricsDatapoint {
@@ -230,6 +328,11 @@ class MetricsDatapoint {
 	Map<String, dynamic> toJson() => {
 		'timestamp' : timestamp,
 	};
+
+	factory MetricsDatapoint.fromJson(Map<String, dynamic> json) => MetricsDatapoint(
+		timestamp: json['timestamp'],
+	);
+
 }
 
 class MetricsLatency {
@@ -240,6 +343,12 @@ class MetricsLatency {
 		'p50' : p50,
 		'p90' : p90,
 	};
+
+	factory MetricsLatency.fromJson(Map<String, dynamic> json) => MetricsLatency(
+		p50: json['p50'],
+		p90: json['p90'],
+	);
+
 }
 
 class PageConfig {
@@ -254,6 +363,14 @@ class PageConfig {
 		'first' : first,
 		'last' : last,
 	};
+
+	factory PageConfig.fromJson(Map<String, dynamic> json) => PageConfig(
+		after: json['after'],
+		before: json['before'],
+		first: json['first'],
+		last: json['last'],
+	);
+
 }
 
 class Record {
@@ -262,12 +379,21 @@ class Record {
 	Map<String, dynamic> toJson() => {
 		'id' : id,
 	};
+
+	factory Record.fromJson(Map<String, dynamic> json) => Record(
+		id: json['id'],
+	);
+
 }
 
 class RecordsMetadata {
 	const RecordsMetadata();
 	Map<String, dynamic> toJson() => {
 	};
+
+	factory RecordsMetadata.fromJson(Map<String, dynamic> json) => RecordsMetadata(
+	);
+
 }
 
 class RevLink {
@@ -278,6 +404,12 @@ class RevLink {
 		'linkID' : linkID,
 		'table' : table,
 	};
+
+	factory RevLink.fromJson(Map<String, dynamic> json) => RevLink(
+		linkID: json['linkID'],
+		table: json['table'],
+	);
+
 }
 
 class Schema {
@@ -286,6 +418,11 @@ class Schema {
 	Map<String, dynamic> toJson() => {
 		'tables' : tables,
 	};
+
+	factory Schema.fromJson(Map<String, dynamic> json) => Schema(
+		tables: json['tables'],
+	);
+
 }
 
 class SortExpression<T> {
@@ -308,6 +445,13 @@ class StartedFromMetadata {
 		'dbBranchID' : dbBranchID,
 		'migrationID' : migrationID,
 	};
+
+	factory StartedFromMetadata.fromJson(Map<String, dynamic> json) => StartedFromMetadata(
+		branchName: json['branchName'],
+		dbBranchID: json['dbBranchID'],
+		migrationID: json['migrationID'],
+	);
+
 }
 
 class Table {
@@ -322,6 +466,14 @@ class Table {
 		'columns' : columns,
 		'revLinks' : revLinks,
 	};
+
+	factory Table.fromJson(Map<String, dynamic> json) => Table(
+		id: json['id'],
+		name: json['name'],
+		columns: json['columns'],
+		revLinks: json['revLinks'],
+	);
+
 }
 
 class TableMigration {
@@ -330,6 +482,11 @@ class TableMigration {
 	Map<String, dynamic> toJson() => {
 		'modifiedColumns' : modifiedColumns,
 	};
+
+	factory TableMigration.fromJson(Map<String, dynamic> json) => TableMigration(
+		modifiedColumns: json['modifiedColumns'],
+	);
+
 }
 
 class TableRename {
@@ -340,6 +497,12 @@ class TableRename {
 		'newName' : newName,
 		'oldName' : oldName,
 	};
+
+	factory TableRename.fromJson(Map<String, dynamic> json) => TableRename(
+		newName: json['newName'],
+		oldName: json['oldName'],
+	);
+
 }
 
 class User {
@@ -352,6 +515,13 @@ class User {
 		'fullname' : fullname,
 		'image' : image,
 	};
+
+	factory User.fromJson(Map<String, dynamic> json) => User(
+		email: json['email'],
+		fullname: json['fullname'],
+		image: json['image'],
+	);
+
 }
 
 class WorkspaceInvite {
@@ -366,6 +536,14 @@ class WorkspaceInvite {
 		'expires' : expires,
 		'role' : role,
 	};
+
+	factory WorkspaceInvite.fromJson(Map<String, dynamic> json) => WorkspaceInvite(
+		inviteId: json['inviteId'],
+		email: json['email'],
+		expires: json['expires'],
+		role: json['role'],
+	);
+
 }
 
 class WorkspaceMember {
@@ -380,6 +558,14 @@ class WorkspaceMember {
 		'email' : email,
 		'role' : role,
 	};
+
+	factory WorkspaceMember.fromJson(Map<String, dynamic> json) => WorkspaceMember(
+		userId: json['userId'],
+		fullname: json['fullname'],
+		email: json['email'],
+		role: json['role'],
+	);
+
 }
 
 class WorkspaceMembers {
@@ -390,6 +576,12 @@ class WorkspaceMembers {
 		'members' : members,
 		'invites' : invites,
 	};
+
+	factory WorkspaceMembers.fromJson(Map<String, dynamic> json) => WorkspaceMembers(
+		members: json['members'],
+		invites: json['invites'],
+	);
+
 }
 
 class WorkspaceMeta {
@@ -400,5 +592,11 @@ class WorkspaceMeta {
 		'name' : name,
 		'slug' : slug,
 	};
+
+	factory WorkspaceMeta.fromJson(Map<String, dynamic> json) => WorkspaceMeta(
+		name: json['name'],
+		slug: json['slug'],
+	);
+
 }
 
