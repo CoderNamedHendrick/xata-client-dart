@@ -330,7 +330,18 @@ void schemas(Response<dynamic> result) {
       modelSink.writeln("');");
       modelSink.writeln("\t\t}");
 
-      modelSink.writeln("\t}");
+      modelSink.writeln("\t}\n");
+
+      // toJson function
+      modelSink.writeln("\tMap<String, dynamic> toJson() => {");
+      modelSink.writeln("\t\t'$key': value,");
+      modelSink.writeln("\t};\n");
+
+      // fromJson function
+      modelSink.writeln(
+          "\tfactory $key.fromJson(Map<String, dynamic> json) => $key(");
+      modelSink.writeln("\t\tjson['$key'],");
+      modelSink.writeln("\t);\n");
 
       modelSink.writeln("}");
     }

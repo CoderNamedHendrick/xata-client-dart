@@ -146,6 +146,15 @@ class FilterColumn<T> {
 			throw Exception('FilterColumn must be of type List<FilterColumnIncludes> or List<FilterPredicate> or List<FilterList>');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'FilterColumn': value,
+	};
+
+	factory FilterColumn.fromJson(Map<String, dynamic> json) => FilterColumn(
+		json['FilterColumn'],
+	);
+
 }
 class FilterColumnIncludes {
 	final FilterPredicate? $includes;
