@@ -12,8 +12,8 @@ class Branch {
 	};
 
 	factory Branch.fromJson(Map<String, dynamic> json) => Branch(
-		name: json['name'],
-		createdAt: json['createdAt'],
+		name: json["name"],
+		createdAt: json["createdAt"],
 	);
 
 }
@@ -30,9 +30,9 @@ class BranchMetadata {
 	};
 
 	factory BranchMetadata.fromJson(Map<String, dynamic> json) => BranchMetadata(
-		repository: json['repository'],
-		branch: json['branch'],
-		stage: json['stage'],
+		repository: json["repository"],
+		branch: json["branch"],
+		stage: json["stage"],
 	);
 
 }
@@ -57,13 +57,13 @@ class BranchMigration {
 	};
 
 	factory BranchMigration.fromJson(Map<String, dynamic> json) => BranchMigration(
-		id: json['id'],
-		parentID: json['parentID'],
-		status: json['status'],
-		title: json['title'],
-		lastGitRevision: json['lastGitRevision'],
-		createdAt: json['createdAt'],
-		renamedTables: json['renamedTables'],
+		id: json["id"],
+		parentID: json["parentID"],
+		status: json["status"],
+		title: json["title"],
+		lastGitRevision: json["lastGitRevision"],
+		createdAt: json["createdAt"],
+		renamedTables: json["renamedTables"],
 	);
 
 }
@@ -80,9 +80,9 @@ class Column {
 	};
 
 	factory Column.fromJson(Map<String, dynamic> json) => Column(
-		name: json['name'],
-		type: json['type'],
-		columns: json['columns'],
+		name: json["name"],
+		type: json["type"],
+		columns: json["columns"],
 	);
 
 }
@@ -97,8 +97,8 @@ class ColumnMigration {
 	};
 
 	factory ColumnMigration.fromJson(Map<String, dynamic> json) => ColumnMigration(
-		old: json['old'],
-		newColumnMigration: json['new'],
+		old: Column.fromJson(json["old"]),
+		newColumnMigration: Column.fromJson(json["new"]),
 	);
 
 }
@@ -125,14 +125,14 @@ class DBBranch {
 	};
 
 	factory DBBranch.fromJson(Map<String, dynamic> json) => DBBranch(
-		databaseName: json['databaseName'],
-		branchName: json['branchName'],
-		createdAt: json['createdAt'],
-		id: json['id'],
-		lastMigrationID: json['lastMigrationID'],
-		metadata: json['metadata'],
-		startedFrom: json['startedFrom'],
-		schema: json['schema'],
+		databaseName: json["databaseName"],
+		branchName: json["branchName"],
+		createdAt: json["createdAt"],
+		id: json["id"],
+		lastMigrationID: json["lastMigrationID"],
+		metadata: BranchMetadata.fromJson(json["metadata"]),
+		startedFrom: StartedFromMetadata.fromJson(json["startedFrom"]),
+		schema: Schema.fromJson(json["schema"]),
 	);
 
 }
@@ -161,10 +161,10 @@ class FilterColumnIncludes {
 	};
 
 	factory FilterColumnIncludes.fromJson(Map<String, dynamic> json) => FilterColumnIncludes(
-		$includes: json['\$includes'],
-		$includesAny: json['\$includesAny'],
-		$includesAll: json['\$includesAll'],
-		$includesNone: json['\$includesNone'],
+		$includes: FilterPredicate.fromJson(json["\$includes"]),
+		$includesAny: FilterPredicate.fromJson(json["\$includesAny"]),
+		$includesAll: FilterPredicate.fromJson(json["\$includesAll"]),
+		$includesNone: FilterPredicate.fromJson(json["\$includesNone"]),
 	);
 
 }
@@ -187,12 +187,12 @@ class FilterExpression {
 	};
 
 	factory FilterExpression.fromJson(Map<String, dynamic> json) => FilterExpression(
-		$exists: json['\$exists'],
-		$existsNot: json['\$existsNot'],
-		$any: json['\$any'],
-		$all: json['\$all'],
-		$none: json['\$none'],
-		$not: json['\$not'],
+		$exists: json["\$exists"],
+		$existsNot: json["\$existsNot"],
+		$any: json["\$any"],
+		$all: json["\$all"],
+		$none: json["\$none"],
+		$not: json["\$not"],
 	);
 
 }
@@ -206,6 +206,15 @@ class FilterList<T> {
 			throw Exception('FilterList must be of type List<FilterExpression> or List<FilterExpression>');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'FilterList': value,
+	};
+
+	factory FilterList.fromJson(Map<String, dynamic> json) => FilterList(
+		json['FilterList'],
+	);
+
 }
 class FilterPredicate<T> {
 	late final T value;
@@ -216,6 +225,15 @@ class FilterPredicate<T> {
 			throw Exception('FilterPredicate must be of type List<FilterValue> or List<FilterPredicate> or List<FilterPredicateOp> or List<FilterPredicateRangeOp>');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'FilterPredicate': value,
+	};
+
+	factory FilterPredicate.fromJson(Map<String, dynamic> json) => FilterPredicate(
+		json['FilterPredicate'],
+	);
+
 }
 class FilterPredicateOp {
 	final FilterRangeValue? $lt;
@@ -239,14 +257,14 @@ class FilterPredicateOp {
 	};
 
 	factory FilterPredicateOp.fromJson(Map<String, dynamic> json) => FilterPredicateOp(
-		$lt: json['\$lt'],
-		$le: json['\$le'],
-		$gt: json['\$gt'],
-		$ge: json['\$ge'],
-		$contains: json['\$contains'],
-		$startsWith: json['\$startsWith'],
-		$endsWith: json['\$endsWith'],
-		$pattern: json['\$pattern'],
+		$lt: FilterRangeValue.fromJson(json["\$lt"]),
+		$le: FilterRangeValue.fromJson(json["\$le"]),
+		$gt: FilterRangeValue.fromJson(json["\$gt"]),
+		$ge: FilterRangeValue.fromJson(json["\$ge"]),
+		$contains: json["\$contains"],
+		$startsWith: json["\$startsWith"],
+		$endsWith: json["\$endsWith"],
+		$pattern: json["\$pattern"],
 	);
 
 }
@@ -265,10 +283,10 @@ class FilterPredicateRangeOp {
 	};
 
 	factory FilterPredicateRangeOp.fromJson(Map<String, dynamic> json) => FilterPredicateRangeOp(
-		$lt: json['\$lt'],
-		$le: json['\$le'],
-		$gt: json['\$gt'],
-		$ge: json['\$ge'],
+		$lt: FilterRangeValue.fromJson(json["\$lt"]),
+		$le: FilterRangeValue.fromJson(json["\$le"]),
+		$gt: FilterRangeValue.fromJson(json["\$gt"]),
+		$ge: FilterRangeValue.fromJson(json["\$ge"]),
 	);
 
 }
@@ -282,6 +300,15 @@ class FilterRangeValue<T> {
 			throw Exception('FilterRangeValue must be of type num or String');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'FilterRangeValue': value,
+	};
+
+	factory FilterRangeValue.fromJson(Map<String, dynamic> json) => FilterRangeValue(
+		json['FilterRangeValue'],
+	);
+
 }
 class FilterValue<T> {
 	late final T value;
@@ -292,6 +319,15 @@ class FilterValue<T> {
 			throw Exception('FilterValue must be of type num or String');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'FilterValue': value,
+	};
+
+	factory FilterValue.fromJson(Map<String, dynamic> json) => FilterValue(
+		json['FilterValue'],
+	);
+
 }
 class ListBranchesResponse {
 	final String databaseName;
@@ -305,9 +341,9 @@ class ListBranchesResponse {
 	};
 
 	factory ListBranchesResponse.fromJson(Map<String, dynamic> json) => ListBranchesResponse(
-		databaseName: json['databaseName'],
-		displayName: json['displayName'],
-		branches: json['branches'],
+		databaseName: json["databaseName"],
+		displayName: json["displayName"],
+		branches: json["branches"],
 	);
 
 }
@@ -330,7 +366,7 @@ class MetricsDatapoint {
 	};
 
 	factory MetricsDatapoint.fromJson(Map<String, dynamic> json) => MetricsDatapoint(
-		timestamp: json['timestamp'],
+		timestamp: json["timestamp"],
 	);
 
 }
@@ -345,8 +381,8 @@ class MetricsLatency {
 	};
 
 	factory MetricsLatency.fromJson(Map<String, dynamic> json) => MetricsLatency(
-		p50: json['p50'],
-		p90: json['p90'],
+		p50: json["p50"],
+		p90: json["p90"],
 	);
 
 }
@@ -365,10 +401,10 @@ class PageConfig {
 	};
 
 	factory PageConfig.fromJson(Map<String, dynamic> json) => PageConfig(
-		after: json['after'],
-		before: json['before'],
-		first: json['first'],
-		last: json['last'],
+		after: json["after"],
+		before: json["before"],
+		first: json["first"],
+		last: json["last"],
 	);
 
 }
@@ -381,7 +417,7 @@ class Record {
 	};
 
 	factory Record.fromJson(Map<String, dynamic> json) => Record(
-		id: json['id'],
+		id: json["id"],
 	);
 
 }
@@ -406,8 +442,8 @@ class RevLink {
 	};
 
 	factory RevLink.fromJson(Map<String, dynamic> json) => RevLink(
-		linkID: json['linkID'],
-		table: json['table'],
+		linkID: json["linkID"],
+		table: json["table"],
 	);
 
 }
@@ -420,7 +456,7 @@ class Schema {
 	};
 
 	factory Schema.fromJson(Map<String, dynamic> json) => Schema(
-		tables: json['tables'],
+		tables: json["tables"],
 	);
 
 }
@@ -434,6 +470,15 @@ class SortExpression<T> {
 			throw Exception('SortExpression must be of type List<String> or SortOrder or List<SortOrder>');
 		}
 	}
+
+	Map<String, dynamic> toJson() => {
+		'SortExpression': value,
+	};
+
+	factory SortExpression.fromJson(Map<String, dynamic> json) => SortExpression(
+		json['SortExpression'],
+	);
+
 }
 class StartedFromMetadata {
 	final BranchName branchName;
@@ -447,9 +492,9 @@ class StartedFromMetadata {
 	};
 
 	factory StartedFromMetadata.fromJson(Map<String, dynamic> json) => StartedFromMetadata(
-		branchName: json['branchName'],
-		dbBranchID: json['dbBranchID'],
-		migrationID: json['migrationID'],
+		branchName: json["branchName"],
+		dbBranchID: json["dbBranchID"],
+		migrationID: json["migrationID"],
 	);
 
 }
@@ -468,10 +513,10 @@ class Table {
 	};
 
 	factory Table.fromJson(Map<String, dynamic> json) => Table(
-		id: json['id'],
-		name: json['name'],
-		columns: json['columns'],
-		revLinks: json['revLinks'],
+		id: json["id"],
+		name: json["name"],
+		columns: json["columns"],
+		revLinks: json["revLinks"],
 	);
 
 }
@@ -484,7 +529,7 @@ class TableMigration {
 	};
 
 	factory TableMigration.fromJson(Map<String, dynamic> json) => TableMigration(
-		modifiedColumns: json['modifiedColumns'],
+		modifiedColumns: json["modifiedColumns"],
 	);
 
 }
@@ -499,8 +544,8 @@ class TableRename {
 	};
 
 	factory TableRename.fromJson(Map<String, dynamic> json) => TableRename(
-		newName: json['newName'],
-		oldName: json['oldName'],
+		newName: json["newName"],
+		oldName: json["oldName"],
 	);
 
 }
@@ -517,9 +562,9 @@ class User {
 	};
 
 	factory User.fromJson(Map<String, dynamic> json) => User(
-		email: json['email'],
-		fullname: json['fullname'],
-		image: json['image'],
+		email: json["email"],
+		fullname: json["fullname"],
+		image: json["image"],
 	);
 
 }
@@ -538,10 +583,10 @@ class WorkspaceInvite {
 	};
 
 	factory WorkspaceInvite.fromJson(Map<String, dynamic> json) => WorkspaceInvite(
-		inviteId: json['inviteId'],
-		email: json['email'],
-		expires: json['expires'],
-		role: json['role'],
+		inviteId: json["inviteId"],
+		email: json["email"],
+		expires: json["expires"],
+		role: json["role"],
 	);
 
 }
@@ -560,10 +605,10 @@ class WorkspaceMember {
 	};
 
 	factory WorkspaceMember.fromJson(Map<String, dynamic> json) => WorkspaceMember(
-		userId: json['userId'],
-		fullname: json['fullname'],
-		email: json['email'],
-		role: json['role'],
+		userId: json["userId"],
+		fullname: json["fullname"],
+		email: json["email"],
+		role: json["role"],
 	);
 
 }
@@ -578,8 +623,8 @@ class WorkspaceMembers {
 	};
 
 	factory WorkspaceMembers.fromJson(Map<String, dynamic> json) => WorkspaceMembers(
-		members: json['members'],
-		invites: json['invites'],
+		members: json["members"],
+		invites: json["invites"],
 	);
 
 }
@@ -594,8 +639,8 @@ class WorkspaceMeta {
 	};
 
 	factory WorkspaceMeta.fromJson(Map<String, dynamic> json) => WorkspaceMeta(
-		name: json['name'],
-		slug: json['slug'],
+		name: json["name"],
+		slug: json["slug"],
 	);
 
 }

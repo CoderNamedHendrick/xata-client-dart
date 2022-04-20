@@ -149,33 +149,13 @@ void schemas(Response<dynamic> result) {
 
   final Map<String, dynamic> json = jsonDecode(result.data);
   final Map schemas = (json['components']['schemas'] as Map);
+  List<String> schemaTypes = [];
+  getTypesAndEnums(schemas, sink, schemaTypes);
+
   for (var key in schemas.keys) {
     final schemaProperties = schemas[key] as Map;
     print(schemaProperties.keys);
     // dealing with schemas with type string
-    if (schemaProperties['type'] == 'string' &&
-        (schemaProperties['title'] != null ||
-            schemaProperties['enum'] != null)) {
-      if (schemaProperties['enum'] != null) {
-        var enums = schemaProperties['enum'] as List;
-
-        sink.write('enum $key {');
-        for (var e in enums) {
-          sink.write('$e,');
-        }
-        sink.writeln('}');
-      } else if (schemaProperties['title'] != null) {
-        sink.writeln('typedef ${schemaProperties['title']} = String;');
-      }
-    }
-
-    // dealing with schemas with type array
-    if (schemaProperties['type'] == 'array' &&
-        schemaProperties['items'] != null) {
-      if (schemaProperties['items']['type'] == 'string') {
-        sink.writeln('typedef $key = List<String>;');
-      }
-    }
 
     // dealing with schemas of oneOf
     if (schemaProperties.containsKey('oneOf')) {
@@ -249,7 +229,18 @@ void schemas(Response<dynamic> result) {
       modelSink.writeln("');");
       modelSink.writeln("\t\t}");
 
-      modelSink.writeln("\t}");
+      modelSink.writeln("\t}\n");
+
+      // toJson function
+      modelSink.writeln("\tMap<String, dynamic> toJson() => {");
+      modelSink.writeln("\t\t'$key': value,");
+      modelSink.writeln("\t};\n");
+
+      // fromJson function
+      modelSink.writeln(
+          "\tfactory $key.fromJson(Map<String, dynamic> json) => $key(");
+      modelSink.writeln("\t\tjson['$key'],");
+      modelSink.writeln("\t);\n");
 
       modelSink.writeln("}");
     }
@@ -361,6 +352,7 @@ void schemas(Response<dynamic> result) {
             modelSink.writeln(
                 '\tfinal ${property.toString().toUpperCase()}${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};');
             types[property] = property.toString().toUpperCase();
+            schemaTypes.add(property.toString().toUpperCase());
           } else {
             modelSink.writeln(
                 "\tfinal String${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};");
@@ -412,8 +404,17 @@ void schemas(Response<dynamic> result) {
       modelSink.writeln(
           "\tfactory $key.fromJson(Map<String, dynamic> json) => $key(");
       for (var type in types.keys) {
+        final fromJsonString = [
+                  'String',
+                  'int',
+                  ...schemaTypes,
+                ].contains((types[type] as String)) ||
+                (types[type] as String).contains('List')
+            ? 'json["${type.contains('\$') ? '\\$type' : type == 'new' ? '$type$key' : '$type'}"]'
+            : '${types["$type"]}'
+                '.fromJson(json["${type.contains('\$') ? '\\$type' : type}"])';
         modelSink.writeln(
-            "\t\t${type == 'new' ? '$type$key' : '$type'}: json['${type.contains('\$') ? '\\$type' : type}'],");
+            "\t\t${type == 'new' ? '$type$key' : '$type'}: $fromJsonString,");
       }
       modelSink.writeln("\t);\n");
 
@@ -421,7 +422,38 @@ void schemas(Response<dynamic> result) {
       modelSink.writeln("}\n");
     }
   }
-
   sink.close();
   modelSink.close();
+}
+
+void getTypesAndEnums(
+    Map<dynamic, dynamic> schemas, IOSink sink, List<String> schemaTypes) {
+  for (var key in schemas.keys) {
+    final schemaProperties = schemas[key] as Map;
+    if (schemaProperties['type'] == 'string' &&
+        (schemaProperties['title'] != null ||
+            schemaProperties['enum'] != null)) {
+      if (schemaProperties['enum'] != null) {
+        var enums = schemaProperties['enum'] as List;
+
+        sink.write('enum $key {');
+        for (var e in enums) {
+          sink.write('$e,');
+        }
+        sink.writeln('}');
+        schemaTypes.add(key as String);
+      } else if (schemaProperties['title'] != null) {
+        sink.writeln('typedef ${schemaProperties['title']} = String;');
+        schemaTypes.add(schemaProperties['title'] as String);
+      }
+    }
+
+    // dealing with schemas with type array
+    if (schemaProperties['type'] == 'array' &&
+        schemaProperties['items'] != null) {
+      if (schemaProperties['items']['type'] == 'string') {
+        sink.writeln('typedef $key = List<String>;');
+      }
+    }
+  }
 }

@@ -8,7 +8,6 @@ part 'parameters.dart';
 
 typedef APIKeyName = String;
 typedef BranchName = String;
-enum TYPE {bool,int,float,string,text,email,multiple,link,object,}
 typedef ColumnName = String;
 typedef ColumnsFilter = List<String>;
 typedef DBBranchName = String;
@@ -22,3 +21,4 @@ enum SortOrder {asc,desc,}
 typedef TableName = String;
 typedef UserID = String;
 typedef WorkspaceID = String;
+enum TYPE {bool,int,float,string,text,email,multiple,link,object,}
