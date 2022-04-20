@@ -342,6 +342,7 @@ void schemas(Response<dynamic> result) {
     if (schemaProperties['type'] == 'object') {
       final Map properties = schemaProperties['properties'] as Map;
       modelSink.writeln("class $key {");
+      List? requiredTypes = schemaProperties['required'] as List?;
       Map types = {};
 
       // writing constructor for model classes
@@ -358,11 +359,11 @@ void schemas(Response<dynamic> result) {
             sink.writeln('}');
 
             modelSink.writeln(
-                '\tfinal ${property.toString().toUpperCase()} ${property == 'new' ? '$property$key' : '$property'};');
+                '\tfinal ${property.toString().toUpperCase()}${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};');
             types[property] = property.toString().toUpperCase();
           } else {
             modelSink.writeln(
-                "\tfinal String ${property == 'new' ? '$property$key' : '$property'};");
+                "\tfinal String${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};");
             types[property] = 'String';
           }
         }
@@ -371,7 +372,7 @@ void schemas(Response<dynamic> result) {
           var pathSplit = (properties[property]["\$ref"] as String).split('/');
           if (pathSplit[pathSplit.length - 2] == "schemas") {
             modelSink.writeln(
-                "\tfinal ${pathSplit[pathSplit.length - 1]} ${property == 'new' ? '$property$key' : '$property'};");
+                "\tfinal ${pathSplit[pathSplit.length - 1]}${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};");
             types[property] = pathSplit[pathSplit.length - 1];
           }
         }
@@ -383,7 +384,7 @@ void schemas(Response<dynamic> result) {
                 (properties[property]['items']["\$ref"] as String).split('/');
             if (pathSplit[pathSplit.length - 2] == "schemas") {
               modelSink.writeln(
-                  "\tfinal List<${pathSplit[pathSplit.length - 1]}> $property;");
+                  "\tfinal List<${pathSplit[pathSplit.length - 1]}>${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} $property;");
               types[property] = 'List<${pathSplit[pathSplit.length - 1]}>';
             }
           }
@@ -392,8 +393,8 @@ void schemas(Response<dynamic> result) {
 
       modelSink.write("\tconst $key(${types.isEmpty ? '' : '{'}");
       for (var type in types.keys) {
-        modelSink
-            .write("required this.${type == 'new' ? '$type$key' : '$type'},");
+        modelSink.write(
+            "${requiredTypes != null && requiredTypes.contains(type) ? 'required ' : ''}this.${type == 'new' ? '$type$key' : '$type'},");
       }
       modelSink.writeln("${types.isEmpty ? '' : '}'});");
       // end of the constructor

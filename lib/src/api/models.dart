@@ -19,10 +19,10 @@ class Branch {
 }
 
 class BranchMetadata {
-	final String repository;
-	final BranchName branch;
-	final String stage;
-	const BranchMetadata({required this.repository,required this.branch,required this.stage,});
+	final String? repository;
+	final BranchName? branch;
+	final String? stage;
+	const BranchMetadata({this.repository,this.branch,this.stage,});
 	Map<String, dynamic> toJson() => {
 		'repository' : repository,
 		'branch' : branch,
@@ -38,14 +38,14 @@ class BranchMetadata {
 }
 
 class BranchMigration {
-	final String id;
-	final String parentID;
+	final String? id;
+	final String? parentID;
 	final String status;
-	final String title;
-	final String lastGitRevision;
-	final DateTime createdAt;
-	final List<TableRename> renamedTables;
-	const BranchMigration({required this.id,required this.parentID,required this.status,required this.title,required this.lastGitRevision,required this.createdAt,required this.renamedTables,});
+	final String? title;
+	final String? lastGitRevision;
+	final DateTime? createdAt;
+	final List<TableRename>? renamedTables;
+	const BranchMigration({this.id,this.parentID,required this.status,this.title,this.lastGitRevision,this.createdAt,this.renamedTables,});
 	Map<String, dynamic> toJson() => {
 		'id' : id,
 		'parentID' : parentID,
@@ -71,8 +71,8 @@ class BranchMigration {
 class Column {
 	final String name;
 	final TYPE type;
-	final List<Column> columns;
-	const Column({required this.name,required this.type,required this.columns,});
+	final List<Column>? columns;
+	const Column({required this.name,required this.type,this.columns,});
 	Map<String, dynamic> toJson() => {
 		'name' : name,
 		'type' : type,
@@ -109,10 +109,10 @@ class DBBranch {
 	final DateTime createdAt;
 	final String id;
 	final String lastMigrationID;
-	final BranchMetadata metadata;
-	final StartedFromMetadata startedFrom;
+	final BranchMetadata? metadata;
+	final StartedFromMetadata? startedFrom;
 	final Schema schema;
-	const DBBranch({required this.databaseName,required this.branchName,required this.createdAt,required this.id,required this.lastMigrationID,required this.metadata,required this.startedFrom,required this.schema,});
+	const DBBranch({required this.databaseName,required this.branchName,required this.createdAt,required this.id,required this.lastMigrationID,this.metadata,this.startedFrom,required this.schema,});
 	Map<String, dynamic> toJson() => {
 		'databaseName' : databaseName,
 		'branchName' : branchName,
@@ -148,11 +148,11 @@ class FilterColumn<T> {
 	}
 }
 class FilterColumnIncludes {
-	final FilterPredicate $includes;
-	final FilterPredicate $includesAny;
-	final FilterPredicate $includesAll;
-	final FilterPredicate $includesNone;
-	const FilterColumnIncludes({required this.$includes,required this.$includesAny,required this.$includesAll,required this.$includesNone,});
+	final FilterPredicate? $includes;
+	final FilterPredicate? $includesAny;
+	final FilterPredicate? $includesAll;
+	final FilterPredicate? $includesNone;
+	const FilterColumnIncludes({this.$includes,this.$includesAny,this.$includesAll,this.$includesNone,});
 	Map<String, dynamic> toJson() => {
 		'\$includes' : $includes,
 		'\$includesAny' : $includesAny,
@@ -170,13 +170,13 @@ class FilterColumnIncludes {
 }
 
 class FilterExpression {
-	final String $exists;
-	final String $existsNot;
-	final FilterList $any;
-	final FilterList $all;
-	final FilterList $none;
-	final FilterList $not;
-	const FilterExpression({required this.$exists,required this.$existsNot,required this.$any,required this.$all,required this.$none,required this.$not,});
+	final String? $exists;
+	final String? $existsNot;
+	final FilterList? $any;
+	final FilterList? $all;
+	final FilterList? $none;
+	final FilterList? $not;
+	const FilterExpression({this.$exists,this.$existsNot,this.$any,this.$all,this.$none,this.$not,});
 	Map<String, dynamic> toJson() => {
 		'\$exists' : $exists,
 		'\$existsNot' : $existsNot,
@@ -218,15 +218,15 @@ class FilterPredicate<T> {
 	}
 }
 class FilterPredicateOp {
-	final FilterRangeValue $lt;
-	final FilterRangeValue $le;
-	final FilterRangeValue $gt;
-	final FilterRangeValue $ge;
-	final String $contains;
-	final String $startsWith;
-	final String $endsWith;
-	final String $pattern;
-	const FilterPredicateOp({required this.$lt,required this.$le,required this.$gt,required this.$ge,required this.$contains,required this.$startsWith,required this.$endsWith,required this.$pattern,});
+	final FilterRangeValue? $lt;
+	final FilterRangeValue? $le;
+	final FilterRangeValue? $gt;
+	final FilterRangeValue? $ge;
+	final String? $contains;
+	final String? $startsWith;
+	final String? $endsWith;
+	final String? $pattern;
+	const FilterPredicateOp({this.$lt,this.$le,this.$gt,this.$ge,this.$contains,this.$startsWith,this.$endsWith,this.$pattern,});
 	Map<String, dynamic> toJson() => {
 		'\$lt' : $lt,
 		'\$le' : $le,
@@ -252,11 +252,11 @@ class FilterPredicateOp {
 }
 
 class FilterPredicateRangeOp {
-	final FilterRangeValue $lt;
-	final FilterRangeValue $le;
-	final FilterRangeValue $gt;
-	final FilterRangeValue $ge;
-	const FilterPredicateRangeOp({required this.$lt,required this.$le,required this.$gt,required this.$ge,});
+	final FilterRangeValue? $lt;
+	final FilterRangeValue? $le;
+	final FilterRangeValue? $gt;
+	final FilterRangeValue? $ge;
+	const FilterPredicateRangeOp({this.$lt,this.$le,this.$gt,this.$ge,});
 	Map<String, dynamic> toJson() => {
 		'\$lt' : $lt,
 		'\$le' : $le,
@@ -336,9 +336,9 @@ class MetricsDatapoint {
 }
 
 class MetricsLatency {
-	final List<MetricsDatapoint> p50;
-	final List<MetricsDatapoint> p90;
-	const MetricsLatency({required this.p50,required this.p90,});
+	final List<MetricsDatapoint>? p50;
+	final List<MetricsDatapoint>? p90;
+	const MetricsLatency({this.p50,this.p90,});
 	Map<String, dynamic> toJson() => {
 		'p50' : p50,
 		'p90' : p90,
@@ -352,11 +352,11 @@ class MetricsLatency {
 }
 
 class PageConfig {
-	final String after;
-	final String before;
-	final String first;
-	final String last;
-	const PageConfig({required this.after,required this.before,required this.first,required this.last,});
+	final String? after;
+	final String? before;
+	final String? first;
+	final String? last;
+	const PageConfig({this.after,this.before,this.first,this.last,});
 	Map<String, dynamic> toJson() => {
 		'after' : after,
 		'before' : before,
@@ -455,11 +455,11 @@ class StartedFromMetadata {
 }
 
 class Table {
-	final String id;
+	final String? id;
 	final TableName name;
 	final List<Column> columns;
-	final List<RevLink> revLinks;
-	const Table({required this.id,required this.name,required this.columns,required this.revLinks,});
+	final List<RevLink>? revLinks;
+	const Table({this.id,required this.name,required this.columns,this.revLinks,});
 	Map<String, dynamic> toJson() => {
 		'id' : id,
 		'name' : name,
@@ -477,8 +477,8 @@ class Table {
 }
 
 class TableMigration {
-	final List<ColumnMigration> modifiedColumns;
-	const TableMigration({required this.modifiedColumns,});
+	final List<ColumnMigration>? modifiedColumns;
+	const TableMigration({this.modifiedColumns,});
 	Map<String, dynamic> toJson() => {
 		'modifiedColumns' : modifiedColumns,
 	};
