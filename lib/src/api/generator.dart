@@ -55,8 +55,9 @@ void responses(Response<dynamic> result) {
 
     // dealing with schemas of type object
     if (schemaProperties['type'] == 'object') {
+      final List? requiredTypes = schemaProperties["required"] as List?;
       if (schemaProperties['example'] != null) {
-        sink.writeln("/// example ${schemaProperties["example"]}");
+        sink.writeln("/// example ${schemaProperties["example"]} \n");
       }
       final Map properties = schemaProperties['properties'] as Map;
       sink.writeln("class $key {");
@@ -66,12 +67,13 @@ void responses(Response<dynamic> result) {
       for (var property in properties.keys) {
         if (properties[property]['type'] == 'string') {
           sink.writeln(
-              "\tfinal String ${property == 'new' ? '$property$key' : '$property'};");
+              "\tfinal String${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};");
           types[property] = 'String';
         }
 
         if (properties[property]['type'] == 'integer') {
-          sink.writeln("\tfinal int $property;");
+          sink.writeln(
+              "\tfinal int${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} $property;");
           types[property] = 'int';
         }
 
@@ -79,7 +81,7 @@ void responses(Response<dynamic> result) {
           var pathSplit = (properties[property]["\$ref"] as String).split('/');
           if (pathSplit[pathSplit.length - 2] == "schemas") {
             sink.writeln(
-                "\tfinal ${pathSplit[pathSplit.length - 1]} ${property == 'new' ? '$property$key' : '$property'};");
+                "\tfinal ${pathSplit[pathSplit.length - 1]}${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} ${property == 'new' ? '$property$key' : '$property'};");
             types[property] = pathSplit[pathSplit.length - 1];
           }
         }
@@ -91,7 +93,7 @@ void responses(Response<dynamic> result) {
                 (properties[property]['items']["\$ref"] as String).split('/');
             if (pathSplit[pathSplit.length - 2] == "schemas") {
               sink.writeln(
-                  "\tfinal List<${pathSplit[pathSplit.length - 1]}> $property;");
+                  "\tfinal List<${pathSplit[pathSplit.length - 1]}>${requiredTypes != null && requiredTypes.contains(property) ? '' : '?'} $property;");
               types[property] = 'List<${pathSplit[pathSplit.length - 1]}>';
             }
           }
@@ -100,7 +102,8 @@ void responses(Response<dynamic> result) {
 
       sink.write("\tconst $key(${types.isEmpty ? '' : '{'}");
       for (var type in types.keys) {
-        sink.write("required this.${type == 'new' ? '$type$key' : '$type'},");
+        sink.write(
+            "${requiredTypes != null && requiredTypes.contains(type) ? 'required ' : ''}this.${type == 'new' ? '$type$key' : '$type'},");
       }
       sink.writeln("${types.isEmpty ? '' : '}'});");
       // end of the constructor
@@ -119,7 +122,15 @@ void responses(Response<dynamic> result) {
       sink.writeln(
           "\tfactory $key.fromJson(Map<String, dynamic> json) => $key(");
       for (var type in types.keys) {
-        sink.writeln("\t\t$type: json['$type'],");
+        final fromJsonString = [
+                  'String',
+                  'int',
+                ].contains((types[type] as String)) ||
+                (types[type] as String).contains('List')
+            ? 'json["${type.contains('\$') ? '\\$type' : type}"]'
+            : '${types["$type"]}'
+                '.fromJson(json["${type.contains('\$') ? '\\$type' : type}"])';
+        sink.writeln("\t\t$type: $fromJsonString,");
       }
       sink.writeln("\t);\n");
 
